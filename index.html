@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Password Strength Check</h2>
+  <input type="text" id="pwInput" placeholder="type a password">
+  <button onclick="checkPassword()">Check</button>
+  
+
+  <p id="result"></p>
+
+  <script>
+    async function checkPassword() {
+      const password = document.getElementById("pwInput").value;
+
+      const response = await fetch("http://127.0.0.1:8000/check-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: password })
+      });
+
+      const data = await response.json();
+      document.getElementById("result").innerText =
+        "Password length: " + data.password_length;
+    }
+  </script>
+</body>
+</html>
