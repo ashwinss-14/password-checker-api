@@ -13,7 +13,7 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    return{"message":"hello ash","status":"learning fastapi"}
+    return FileResponse("index.html")
 
 class PasswordCheck(BaseModel):
     password:str
