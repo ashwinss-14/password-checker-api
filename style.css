@@ -37,3 +37,13 @@ button:hover{
   font-size: 14px;
   color: #a29bfe;
 }
+#result ul {
+  list-style: none;
+  padding-left: 0;
+  text-align: left;
+}
+
+#result li {
+  margin-bottom: 6px;
+  font-size: 13px;
+}
