@@ -32,10 +32,10 @@ def check_length(password: str) -> tuple[bool, str]:
 
 def check_complexity(password: str) -> tuple[int, str]:
     categories = {
-        "lowercase": any(c.islower() for c in password),
-        "uppercase": any(c.isupper() for c in password),
-        "digit": any(c.isdigit() for c in password),
-        "special": any(c in string.punctuation for c in password),
+        "lowercase letters": any(c.islower() for c in password),
+        "uppercase letters": any(c.isupper() for c in password),
+        "digits": any(c.isdigit() for c in password),
+        "special characters": any(c in string.punctuation for c in password),
     }
     score = sum(categories.values())
     missing = [name for name, present in categories.items() if not present]
