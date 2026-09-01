@@ -16,18 +16,29 @@
 
   <script>
     async function checkPassword() {
-      const password = document.getElementById("pwInput").value;
+    const password = document.getElementById("pwInput").value;
 
-      const response = await fetch("https://password-length-checker-api.onrender.com/check-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: password })
-      });
+    const response = await fetch("https://password-length-checker-api.onrender.com/check-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: password })
+    });
 
-      const data = await response.json();
-      document.getElementById("result").innerText =
-        "Password length: " + data.password_length;
+    const data = await response.json();
+
+    let output = `<strong>${data.label}</strong> (${data.score}/100)<br>`;
+    output += "<ul>";
+    for (const detail of data.details) {
+      output += `<li>${detail}</li>`;
     }
+    output += "</ul>";
+
+    if (data.suggestion) {
+      output += `Suggestion: <strong>${data.suggestion}</strong>`;
+    }
+
+    document.getElementById("result").innerHTML = output;
+  }
   </script>
 </body>
 </html>
