@@ -5,6 +5,7 @@ from pydantic import BaseModel
 import re
 import string
 import random
+import hashlib
 
 app = FastAPI()
 
@@ -20,6 +21,11 @@ COMMON_PASSWORDS = {
     "abc123", "password1", "111111", "12345678",
     "letmein", "iloveyou", "admin", "welcome", "monkey", "dragon", "sunshine"
 }
+
+password_history: dict[str, set[str]] = {}
+
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode()).hexdigest()
 
 def check_length(password: str) -> tuple[bool, str]:
     length = len(password)
@@ -119,12 +125,26 @@ def styles():
     return FileResponse("style.css")
 
 class PasswordCheck(BaseModel):
+    username:str
     password: str
+    
 
 @app.post("/check-password")
 def check_password(data: PasswordCheck):
+    pw_hash = hash_password(data.password)
+    user_history = password_history.setdefault(data.username, set())
+
+    if pw_hash in user_history:
+        return {
+            "reused": True,
+            "message": "This password has been used before by this user. Choose a different one."
+        }
+
     result = evaluate_password(data.password)
+    user_history.add(pw_hash)
+    
     response = {
+        "reused": False,
         "score": result["score"],
         "label": result["label"],
         "details": result["details"],
