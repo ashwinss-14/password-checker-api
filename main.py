@@ -16,6 +16,11 @@ app.add_middleware(
 def home():
     return FileResponse("index.html")
 
+@app.get("/style.css")
+def styles():
+    return FileResponse("style.css")
+
+
 class PasswordCheck(BaseModel):
     password:str
 
